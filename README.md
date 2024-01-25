@@ -43,7 +43,7 @@ And you need to install following python libraries to run the code.
    After training, you can get the result image in the "result"  folder (which locates at the same directory as .py files).
 
 
-   The image is named as "result\chicago_wave_gatys.jpg" or "result\chicago_wave_laps.jpg" depended on which code you run.
+   The image is named as "result\chicago_wave_gatys.jpg" or "result\chicago_wave_laps.jpg" depending on which code you run.
    
 
 3. **Run with Customized Settings**
@@ -66,7 +66,7 @@ And you need to install following python libraries to run the code.
 
        The default value for "checkpoint" is 0, which means to use no checkpoint.
 
-       If you do want to use checkpoint, you can use command like
+       If you do wish to use checkpoint, you can use command like
 
        ```
        python GatyStyle.py --checkpoint 1
@@ -101,7 +101,7 @@ And you need to install following python libraries to run the code.
        ```
 ## 3. MetaStyle
 
-   1. **Train**
+   1. **Training**
 
       1. Download Dataset
 
