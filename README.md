@@ -40,14 +40,11 @@ And you need to install following python libraries to run the code.
    in Windows PowerShell, and it will start downloading pretrained model (if not downloaded yet) and started training.
 
 
-   During training, the losses will be printed on the screen.
-
-   After training, you can the result image in the "result"  folder (which locates at the same directory as .py files).
+   After training, you can get the result image in the "result"  folder (which locates at the same directory as .py files).
 
 
-   The image is named as "gatys_final.jpg" or "laps_final.jpg" depended on which code you run.
-
-   Also, you can see checkpoint results in the "checkpoint" folder.
+   The image is named as "result\chicago_wave_gatys.jpg" or "result\chicago_wave_laps.jpg" depended on which code you run.
+   
 
 3. **Run with Customized Settings**
 
@@ -67,15 +64,13 @@ And you need to install following python libraries to run the code.
 
        Also for both models, you can use parameter "checkpoint" to choose whether use checkpoint or not.
 
-       The default value for "checkpoint" is 1, which means to use checkpoint.
+       The default value for "checkpoint" is 0, which means to use no checkpoint.
 
-       If you do not want to use checkpoint, you can use command like
+       If you do want to use checkpoint, you can use command like
 
        ```
-       python GatyStyle.py --checkpoint 0
+       python GatyStyle.py --checkpoint 1
        ```
-
-       to choose not to use checkpoint.
 
    3.  Change the Size of Result Image
 
@@ -85,7 +80,7 @@ And you need to install following python libraries to run the code.
        python GatyStyle.py --size 600
        ```
 
-       and the result image will have a size of  "size*size".
+       and the result image will have a height of 600 pixels and the width will also change proportionally.
 
    4.  Change Training Parameters
 
@@ -111,7 +106,7 @@ And you need to install following python libraries to run the code.
       1. Download Dataset
 
          Download content image dataset and style image dataset form [MS-COCO](http://cocodataset.org/#download) and [WikiArt](https://www.kaggle.com/c/painter-by-numbers).
-      3. Run with Default Settings
+      2. Run with Default Settings
 
          You can use command
          ```
@@ -124,34 +119,22 @@ And you need to install following python libraries to run the code.
 
          The trained model will be save in './experiments/save'.
 
-      5. Run with Customized Settings
+      3. Run with Customized Settings
 
          To change directories, you can add
          ```
-         --save-model-dir 'your_save_path' --checkpoint-model-dir 'your_checkpoint_path' --log-dir 'your_log_path'
+         --save-model-dir <your_save_path> --checkpoint-model-dir <your_checkpoint_path> --log-dir <your_log_path>
          ```
          at the end of above command.
 
-         If content image or style image does not have a size of 256, for example they both have a size of 128
-         you need to add following arguments 
-         ``` 
-         --content-size 128 --style-size 128
-         ```
-
-         To change trainning parameters, you can add following arguments, and change the number
-         ```
-         --max-iter 10000 --iter-batch_size 4 --meta-batch_size 4 \
-         --met-step 4 --cuda 0 --seed 1 \
-         --content-weight 1 --style_weight 100000 --lr 0.00001 \
-         --checkpoint-interval 4 --n-workers 4 
-         ```
+  
    2. **Fast Training**
 
        1. Run with Default Settings
           
           You can use command
           ```
-          python main.py fast --content-dataset <path_to_content_dataset> --style-image <path_to_style_image> --cuda 1
+          python main.py fast --content-dataset <path_to_content_dataset> --style-image <path_to_style_image> --model your_model.pth --cuda 1
           ```
 
           The trained model will be saved in './experiments/save' as well.
@@ -159,43 +142,18 @@ And you need to install following python libraries to run the code.
 
           You can change the directory of saving model by adding argument
           ```
-          --save-dir <your_save_path>
+          --save-model-dir <your_save_path>
           ```
 
-          If the size of content image is not 256,for example 128, you need to adding argument
+          If you want to update only IN layers, you can add the following argument
           ```
-          ---content-size 128
-          ```
-
-          Also, you can change training parameters by adding following arguments and change the number
-          ```
-          --style-size 256 --update-step 200 --content-weight 1 \
-          --style-weight 100000 --lr 0.001 --iter-batch-size 4 \
-          --n-workers 4 --only-in 0
-          ```
-          Specially, you can set only-in to 1, if you want to updata IN lyaers only.
+          --only-in 1
+          ``` 
          
     
    3. **Testing**
-       1. Run with Default Settings
 
-          You can use command
-
-          ```
-          python main.py test --content-image <path_to_content_image> --output-image <path_to_output_image> --cuda 1
-          ```
-                 
-       2. Run with Customized Settings
-
-          You can add arugument
-          ```
-          --content-size 512
-          ```
-          to change the size of image
-
-          You can add argument
-          ```
-          --model <yourmodel.pth>
-          ```
-          to select model to stylize the image
-          
+      You can use command
+      ```
+      python main.py test --content-image <path_to_content_img> --output_image <path_to_output image> --model your_model.pth --cuda 1
+      ```
