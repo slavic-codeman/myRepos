@@ -18,8 +18,8 @@ And you need to install following python libraries to run the code.
    You can use following command to download all the packages.
    ```
    pip install -r requirements.txt
-   ``` 
-      
+   ```
+   
 
 ## 2. GatyStyle and LapStyle
 
@@ -44,7 +44,7 @@ And you need to install following python libraries to run the code.
 
 
    The image is named as "result\chicago_wave_gatys.jpg" or "result\chicago_wave_laps.jpg" depending on which code you run.
-   
+
 
 3. **Run with Customized Settings**
 
@@ -110,7 +110,7 @@ And you need to install following python libraries to run the code.
 
          You can use command
          ```
-         python main.py train --content-dataset <path_to_content_dataset>--style-dataset <path_to_style_dataset> --cuda 1
+         python metastyle.py train --content-dataset <path_to_content_dataset>--style-dataset <path_to_style_dataset> --cuda 1
          ```
          to run the model with default settings.
 
@@ -127,14 +127,14 @@ And you need to install following python libraries to run the code.
          ```
          at the end of above command.
 
-  
+
    2. **Fast Training**
 
        1. Run with Default Settings
           
           You can use command
           ```
-          python main.py fast --content-dataset <path_to_content_dataset> --style-image <path_to_style_image> --model your_model.pth --cuda 1
+          python metastyle.py fast --content-dataset <path_to_content_dataset> --style-image <path_to_style_image> --model your_model.pth --cuda 1
           ```
 
           The trained model will be saved in './experiments/save' as well.
@@ -148,12 +148,11 @@ And you need to install following python libraries to run the code.
           If you want to update only IN layers, you can add the following argument
           ```
           --only-in 1
-          ``` 
-         
-    
+          ```
+       
    3. **Testing**
 
       You can use command
       ```
-      python main.py test --content-image <path_to_content_img> --output_image <path_to_output image> --model your_model.pth --cuda 1
+      python metastyle.py test --content-image <path_to_content_img> --output_image <path_to_output image> --model your_model.pth --cuda 1
       ```
