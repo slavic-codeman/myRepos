@@ -1,5 +1,15 @@
 # Lab4 Description
-本次Lab主要有六个py文件:dataprocess.py,Sparse.py,examples.py,csv_process.py,main.py,baseline.py
+本次Lab的结构如下
+```
+project_root/
+├── README.md               # 项目说明文件
+├── dataprocess.py          # 数据预处理文件
+├── Sparse.py               # 检索例句的函数
+├── examples.py             # 构建每个query的prompt
+├── csv_process.py          # 生成结果后处理
+├── main.py                 # 进行测试的主程序
+└── baseline.py             # zero-shot推理
+```
 ## 依赖项安装
 建议Python>=3.8避免可能存在的不兼容性。主要使用的外部库通过以下命令安装
 ```
@@ -12,14 +22,15 @@ conda create -n myenv python=3.10
 conda activate myenv
 conda install openai rank-bm25 tqdm
 ```
-进行安装，并且推荐这种方式，因为这可以避免污染不同的Python环境
+进行安装，并且推荐这种方式，因为这可以避免污染不同的Python环境。
 ## dataprocess.py
 主要是json文件读取和写入函数，以及对dictionary_za2zh.jsonl的数据转换，便于输入到LLM中，例如由
 ```
     {"za_word": "a", 
     "zh_meanings": ["乌鸦", "呀", "呢"], 
     "source": "https://zha_zho.en-academic.com/001", 
-    "zh_meanings_full": ["乌鸦 [与roegga同]", "呀 Caezgya vaiq daeuj ～！大家快来呀!", "(【见】 le) 呢 [语气词, 表示疑问]"]}
+    "zh_meanings_full": ["乌鸦 [与roegga同]", "呀 Caezgya vaiq daeuj ～！大家快来呀!", "(【见】 le) 呢 [语气词, 表示疑问]"]
+    }
 ```
 变为
 ```
@@ -45,7 +56,7 @@ conda install openai rank-bm25 tqdm
 ## csv_process.py
 基于经验规则的csv文件后处理，去除输出中的多余部分。
 ### 依赖项
-Python自带的csv库
+Python自带的csv库。
 
 ## main.py
 调用LLM完成对test_data.json的翻译，保存结果和prompts内容，可以改变sample变量从而改变选择例句的方法。
@@ -56,7 +67,7 @@ openai和tqdm库，以及examples.py,dataprocess.py,csv_process.py文件。
 ```
 python main.py
 ```
-即可完成对test_data.json的翻译。
+即可完成对test_data.json的翻译，会在目录下生成初始csv文件和进行后处理后的csv文件。
 
 ## baseline.py
 在不提供示例的情况下，让LLM完成对test_data.json的翻译。
@@ -67,4 +78,4 @@ openai和tqdm库，以及dataprocess.py,csv_process.py文件。
 ```
 python baseline.py
 ```
-即可完成对test_data.json的翻译，可以将生成的结果与main.py生成的结果进一步对比。
+即可完成对test_data.json的翻译，同样会在目录下生成初始csv文件和进行后处理后的csv文件。可以将生成的结果与main.py生成的结果进一步对比。
