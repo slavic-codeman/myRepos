@@ -16,7 +16,10 @@ conda install openai rank-bm25 tqdm
 ## dataprocess.py
 主要是json文件读取和写入函数，以及对dictionary_za2zh.jsonl的数据转换，便于输入到LLM中，例如由
 ```
-    {"za_word": "a", "zh_meanings": ["乌鸦", "呀", "呢"], "source": "https://zha_zho.en-academic.com/001", "zh_meanings_full": ["乌鸦 [与roegga同]", "呀 Caezgya vaiq daeuj ～！大家快来呀!", "(【见】 le) 呢 [语气词, 表示疑问]"]}
+    {"za_word": "a", 
+    "zh_meanings": ["乌鸦", "呀", "呢"], 
+    "source": "https://zha_zho.en-academic.com/001", 
+    "zh_meanings_full": ["乌鸦 [与roegga同]", "呀 Caezgya vaiq daeuj ～！大家快来呀!", "(【见】 le) 呢 [语气词, 表示疑问]"]}
 ```
 变为
 ```
