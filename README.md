@@ -1,158 +1,67 @@
-## 1. Installation
+# Lab4 Description
+本次Lab主要有六个py文件:dataprocess.py,Sparse.py,examples.py,csv_process.py,main.py,baseline.py
+## 依赖项安装
+建议Python>=3.8避免可能存在的不兼容性。主要使用的外部库通过以下命令安装
+```
+pip install openai rank-bm25 tqdm
 
-The code has been tested on Windows PowerShell using python 3.10.
+```
+如果使用conda虚拟环境，也可以使用
+```
+conda create -n myenv python=3.10
+conda activate myenv
+conda install openai rank-bm25 tqdm
+```
+进行安装，并且推荐这种方式，因为这可以避免污染不同的Python环境
+## dataprocess.py
+主要是json文件读取和写入函数，以及对dictionary_za2zh.jsonl的数据转换，便于输入到LLM中，例如由
+```
+    {"za_word": "a", "zh_meanings": ["乌鸦", "呀", "呢"], "source": "https://zha_zho.en-academic.com/001", "zh_meanings_full": ["乌鸦 [与roegga同]", "呀 Caezgya vaiq daeuj ～！大家快来呀!", "(【见】 le) 呢 [语气词, 表示疑问]"]}
+```
+变为
+```
+    {
+        "za": "a",
+        "zh": "乌鸦;呀;呢"
+    },
+```
+这将得到整理好的dic_org.json文件。
+### 依赖项
+仅需要Python自带的json库。
 
-And you need to install following python libraries to run the code.
+## Sparse.py
+完成对单个query在平行语料库找相似例句，包括bm25和random两种策略。
+### 依赖项
+主要依赖rank-bm25库。
 
-1. **Install PyTorch with CUDA 12.1**
+## examples.py
+调用dataprocess.py中的load_json函数和Sparse.py中的选择函数，在get_prompt函数中得到每个query对应的单词示例和句子示例，调用create_prompt函数得到可以直接用于LLM的API的数据格式。
+### 依赖项
+依赖dataprocess.py和Sparse.py两个文件。
 
-   You can use command from [pytorch.org](https://pytorch.org/) to install them.
+## csv_process.py
+基于经验规则的csv文件后处理，去除输出中的多余部分。
+### 依赖项
+Python自带的csv库
 
-   ```
-   pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
-   ```
+## main.py
+调用LLM完成对test_data.json的翻译，保存结果和prompts内容，可以改变sample变量从而改变选择例句的方法。
+### 依赖项
+openai和tqdm库，以及examples.py,dataprocess.py,csv_process.py文件。
+### 代码运行
+在文件夹目录终端中输入
+```
+python main.py
+```
+即可完成对test_data.json的翻译。
 
-2. **Install Other Libraries**
-   
-   Check requirements.txt for other packages required.
-   You can use following command to download all the packages.
-   ```
-   pip install -r requirements.txt
-   ```
-   
-
-## 2. GatyStyle and LapStyle
-
-1. **Run with Default Settings**
-
-   To run with default settings, you can simply use command 
-
-   ```
-   python GatyStyle.py
-   ```
-
-   or
-
-   ```
-   python LapStyle.py
-   ```
-
-   in Windows PowerShell, and it will start downloading pretrained model (if not downloaded yet) and started training.
-
-
-   After training, you can get the result image in the "result"  folder (which locates at the same directory as .py files).
-
-
-   The image is named as "result\chicago_wave_gatys.jpg" or "result\chicago_wave_laps.jpg" depending on which code you run.
-
-
-3. **Run with Customized Settings**
-
-   1. Change the Read and Write Path
-
-      For both models, we have "content", "style" and "save" parameters to change the default read and save path.
-
-      You can use commands like
-
-      ```
-      python GatyStyle.py --content content_path\content_img.jpg --style style_path\style_img.jpg --save save_path\save_name.jpg
-      ```
-
-      to change the content or style image that will be used, as well as the directory and name of the result image.
-
-   2. Choose whether use Checkpoint
-
-       Also for both models, you can use parameter "checkpoint" to choose whether use checkpoint or not.
-
-       The default value for "checkpoint" is 0, which means to use no checkpoint.
-
-       If you do wish to use checkpoint, you can use command like
-
-       ```
-       python GatyStyle.py --checkpoint 1
-       ```
-
-   3.  Change the Size of Result Image
-
-       You can use command like
-
-       ```
-       python GatyStyle.py --size 600
-       ```
-
-       and the result image will have a height of 600 pixels and the width will also change proportionally.
-
-   4.  Change Training Parameters
-
-       Both models have "iter","content_weight" and "style_weight" parameters.
-
-       To change them, you can use commands like
-
-       ```
-       python GatyStyle.py --iter 6000 --content_weight 1 --style_weight 1000
-       ```
-
-       And for LapStyle model, it has an extra parameter called "lap_weight".
-
-       To change it, you can use following command
-
-       ```
-       python LapStyle.py --lap_weight 0.5
-       ```
-## 3. MetaStyle
-
-   1. **Training**
-
-      1. Download Dataset
-
-         Download content image dataset and style image dataset form [MS-COCO](http://cocodataset.org/#download) and [WikiArt](https://www.kaggle.com/c/painter-by-numbers).
-      2. Run with Default Settings
-
-         You can use command
-         ```
-         python metastyle.py train --content-dataset <path_to_content_dataset>--style-dataset <path_to_style_dataset> --cuda 1
-         ```
-         to run the model with default settings.
-
-         The path should be a folder containing another folder with all content or style images.
-         Cuda 1 means using GPU while cuda 0 means using CPU.
-
-         The trained model will be save in './experiments/save'.
-
-      3. Run with Customized Settings
-
-         To change directories, you can add
-         ```
-         --save-model-dir <your_save_path> --checkpoint-model-dir <your_checkpoint_path> --log-dir <your_log_path>
-         ```
-         at the end of above command.
-
-
-   2. **Fast Training**
-
-       1. Run with Default Settings
-          
-          You can use command
-          ```
-          python metastyle.py fast --content-dataset <path_to_content_dataset> --style-image <path_to_style_image> --model your_model.pth --cuda 1
-          ```
-
-          The trained model will be saved in './experiments/save' as well.
-       2. Run with Customized Settings
-
-          You can change the directory of saving model by adding argument
-          ```
-          --save-model-dir <your_save_path>
-          ```
-
-          If you want to update only IN layers, you can add the following argument
-          ```
-          --only-in 1
-          ```
-       
-   3. **Testing**
-
-      You can use command
-      ```
-      python metastyle.py test --content-image <path_to_content_img> --output_image <path_to_output image> --model your_model.pth --cuda 1
-      ```
+## baseline.py
+在不提供示例的情况下，让LLM完成对test_data.json的翻译。
+### 依赖项
+openai和tqdm库，以及dataprocess.py,csv_process.py文件。
+### 代码运行
+在文件夹目录终端中输入
+```
+python baseline.py
+```
+即可完成对test_data.json的翻译，可以将生成的结果与main.py生成的结果进一步对比。
