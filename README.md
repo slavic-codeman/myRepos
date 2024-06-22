@@ -3,10 +3,10 @@
 ```
 project_root/
 ├── README.md               # 项目说明文件
-├── dataprocess.py          # 数据预处理文件
+├── dataprocess.py          # 数据预处理
 ├── Sparse.py               # 检索例句的函数
 ├── examples.py             # 构建每个query的prompt
-├── csv_process.py          # 生成结果后处理
+├── csv_process.py          # 后处理函数
 ├── main.py                 # 进行测试的主程序
 └── baseline.py             # zero-shot推理
 ```
@@ -42,7 +42,12 @@ conda install openai rank-bm25 tqdm
 这将得到整理好的dic_org.json文件。
 ### 依赖项
 仅需要Python自带的json库。
-
+### 代码运行
+在文件夹目录终端中输入
+```
+python dataprocess.py
+```
+完成对数据的预处理，生成dic_org.json文件，在此之后才能运行main.py和baseline.py进行翻译。
 ## Sparse.py
 完成对单个query在平行语料库找相似例句，包括bm25和random两种策略。
 ### 依赖项
